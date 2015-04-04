@@ -167,27 +167,43 @@ brew update
 
 #brews
 brew_install_or_upgrade 'git'
+brew_install_or_upgrade 'mongo'
+brew_launchctl_restart 'mongo'
 brew_install_or_upgrade 'redis'
 brew_launchctl_restart 'redis'
 brew_install_or_upgrade 'the_silver_searcher'
 brew_install_or_upgrade 'vim'
 brew_install_or_upgrade 'ctags'
-brew_install_or_upgrade 'tmux'
 brew_install_or_upgrade 'reattach-to-user-namespace'
 brew_install_or_upgrade 'node'
 brew_install_or_upgrade 'npm'
 brew_install_or_upgrade 'nvm'
+brew_install_or_upgrade 'gpg2'
+brew_launchctl_restart 'gpg2'
 
 #casks
-brew_install_or_upgrade 'caskroom/cask/brew-cask'
+brew tap 'caskroom/cask'
+brew_install_or_upgrade 'brew-cask'
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 brew_cask_install 'iterm2'
+brew_cask_install 'sizeup'
+brew_cask_install 'google-chrome'
 
 if ! command -v rcup >/dev/null; then
   brew_tap 'thoughtbot/formulae'
   brew_install_or_upgrade 'rcm'
 fi
 
-if [ -f "$HOME/.laptop.local" ]; then
-  . "$HOME/.laptop.local"
-fi
+#install oh-my-zsh
+curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+
+#get dotfiles
+mkdir $HOME/git && cd $HOME/git && git clone https://github.com/autodidacticon/dotfiles.git
+rcup -d $HOME/git/dotfiles
+
+#python
+easy_install pip
+pip install virtualenvwrapper
+
+#rvm
+curl -sSL https://get.rvm.io | bash
